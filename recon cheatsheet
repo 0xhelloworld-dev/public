@@ -1,0 +1,104 @@
+Go the road less travelled, find programs that are not on hackerone or bugcrowd:
+https://www.bugcrowd.com/bug-bounty-list/
+google: "Responsible Disclosure" or "Vulnerability Disclosure" or "responsible disclosure website list"
+google:             responsible disclosure "bounty"
+Responsible Disclosure seems to give best results.
+intext:”Responsible Disclosure Policy”
+"responsible disclosure" "private program" 
+"responsible disclosure" "private" "program"
+
+Google Dork:
+vulnerability disclosure program "bounty" -bugcrowd -hackerone
+responsible disclosure "private program"                                         <--- find private hackerone/bugcrowd programs
+=========================================================================
+Google Dorker:
+https://github.com/random-robbie/bugbountydork/blob/master/main.py
+
+Subdomain Enumeration:
+./amass -active -v -d test.com       OR /root/go/bin/amass -active -v -d test.com
+./subfinder -d test.com        OR /root/go/bin/subfinder -d test.com
+./subfinder -b -w /root/Desktop/jhaddixALL/subdomainsALL.txt -d upwork.com -v
+python sublist3r.py -b -d example.com -v -t 40 -o example.txt 
+python sublist3r.py -p 21,22,3389,8080,8181,8000,9443,8443,6900
+aquatone-discover -d test.com   Enumeration with aquatone: https://blog.it-securityguard.com/visual-recon-a-beginners-guide/
+
+========================================================================
+Subdomain Analysis:
+
+Subdomain bruteforcing:
+./subfinder -d example.com -b -dL jasonhaddixall.txt                                             OR /root/go/bin/subfinder -d test.com -b -dL jasonhaddixall.txt
+
+Subdomain Analysis:
+./EyeWitness.py --prepend-https -f /root/vanillasublister.txt --web --user-agent "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.181 Safari/537.36" -d targetvanilla
+
+Port Scanning:
+nmap -p 21,22,3389,8080,8181,8000,9443,8443,6900 -iL targets.txt 
+aquatone-scan -d uber.com -t 30 -p medium  
+aquatone-scan -d test.com -t 30 -p small (small is port 443 and 80)
+
+webscreenshot -i /tmp/adobeurls.txt -o /targets/adobe.com -v 
+webscreenshot -i /tmp/adobeurls.txt -o /targets/adobe.com -v -m (HTTP & HTTPS)
+epg-prep /root/adobe.com
+node yourname.js
+http://yourserverip:3000/photos
+
+site:site.com ext:php,asp,aspx,jsp,jspa,txt,swf
+
+http://archive.org/web/ (if subdomain name indicates critical data config.test.com or admin.test.com, try looking at it from wayback machine. may show critical data (API keys, user/pass)
+site:admin.target.com (if website returns 403, try google dorking the website to see if there is any endpoints you can access)
+                -can also try searching wayback machine for endpoints via curl(https://github.com/internetarchive/wayback/blob/master/wayback-cdx-server/README.md)
+                -curl 'http://web.archive.org/cdx/search/cdx?url=games.sidefx.com/*&output=text&fl=original&collapse=urlkey'
+                                ^^^ more info https://www.shawarkhan.com/2018/06/getting-php-code-execution-and-leverage.html
+You can query commoncrawl.org to discover endpoints as well:
+                python3 cc.py github.com -y 18 -o github_2018.txt
+
+Subdomain Takeover:
+aquatone-takeover -d adobe.com
+
+CORS Testing:
+
+==========================================================
+
+Directory Bruteforcing:
+./dirsearch.py -u http://target.com -e * -r
+./dirsearch.py -u http://target.com -e * -r -w /root/Desktop/jhaddixALL/directoriesjhaddix.txt --plain-text-report=/root/Desktop/report
+
+Finding directories:
+./dirsearch.py -u http://target.com -L /root/jhaddix/jhaddixdirectories.txt
+https://gist.github.com/jhaddix/b80ea67d85c13206125806f0828f4d10 <---- jason haddix directory bruteforce list
+./dirsearch.py -u http://target.com -e * -r -w /opt/tools/directorywordlists/raft-medium-directories.txt --plain-text-report=/root/Desktop/report <---- bruteforce directory
+LOOK FOR GOBUSTER
+
+dirb 10 threads, jason haddix wordlist
+============================================================
+
+
+Once new directories are found, find files in those directories:
+./dirsearch.py -u http://target.com -r -w /opt/tools/directorywordlists/raft-medium-files.txt --plain-text-report=/root/Desktop/report <---- bruteforce files
+./dirsearch.py -u http://target.com -e * -r
+
+===========================================================
+Find scripts:
+site:test.com ext:php
+site:test.com ext:asp
+
+github recon:
+site:github.com inurl:looker "api" "key"
+site:github.com inurl:looker "password"
+
+Endpoint Discovery:
+Linkfinder
+    Target Tab > Right Click Target.com > Save Selected Items
+    python linkfinder.py -o cli -i burpfile
+    
+Link Finder 
+    Target Tab > Right Click Target.com > Engagement Tools > Find Scripts
+    Ctrl A > Copy Selected URLs (Paste to textfile linkfinder.txt)
+    cat linkfinder.txt | grep .js > linkfinder2.txt
+          python linkfinder.py -o cli -i http://target.com/everylink.js
+          OR copy and paste into JSParser:
+             python handler.py (visit localhost:8008)
+    ===============================================
+    https://whatcms.org/ discover type of CMS running on website
+    
+ 
