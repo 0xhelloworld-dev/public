@@ -1,0 +1,202 @@
+{
+  "name": "NASA workflow",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "65ac0a56-a477-4f74-9952-c164a309bcea",
+      "name": "Start",
+      "type": "n8n-nodes-base.start",
+      "typeVersion": 1,
+      "position": [
+        240,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "triggerTimes": {
+          "item": [
+            {
+              "mode": "everyWeek"
+            }
+          ]
+        }
+      },
+      "id": "f82afb85-8659-4871-b2f1-dbac9244a4d8",
+      "name": "Cron",
+      "type": "n8n-nodes-base.cron",
+      "typeVersion": 1,
+      "position": [
+        460,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "donkiSolarFlare",
+        "additionalFields": {
+          "startDate": "={{$today.minus({days: 7}).toFormat('yyyy-MM-dd')}}",
+          "endDate": "2022-10-13T07:00:00.000Z"
+        }
+      },
+      "id": "1a29b28e-ea0c-47d9-8e36-1bddeeec4733",
+      "name": "NASA",
+      "type": "n8n-nodes-base.nasa",
+      "typeVersion": 1,
+      "position": [
+        680,
+        300
+      ],
+      "credentials": {
+        "nasaApi": {
+          "id": "8",
+          "name": "NASA account"
+        }
+      }
+    }
+  ],
+  "pinData": {
+    "NASA": [
+      {
+        "json": {
+          "flrID": "2022-10-10T00:35:00-FLR-001",
+          "instruments": [
+            {
+              "displayName": "GOES-P: EXIS 1.0-8.0"
+            }
+          ],
+          "beginTime": "2022-10-10T00:35Z",
+          "peakTime": "2022-10-10T00:47Z",
+          "endTime": "2022-10-10T00:55Z",
+          "classType": "M1.0",
+          "sourceLocation": "N25W23",
+          "activeRegionNum": 13116,
+          "linkedEvents": null,
+          "link": "https://webtools.ccmc.gsfc.nasa.gov/DONKI/view/FLR/21955/-1"
+        }
+      },
+      {
+        "json": {
+          "flrID": "2022-10-10T16:07:00-FLR-001",
+          "instruments": [
+            {
+              "displayName": "GOES-P: EXIS 1.0-8.0"
+            }
+          ],
+          "beginTime": "2022-10-10T16:07Z",
+          "peakTime": "2022-10-10T16:28Z",
+          "endTime": "2022-10-10T16:47Z",
+          "classType": "M2.4",
+          "sourceLocation": "N25W33",
+          "activeRegionNum": 13112,
+          "linkedEvents": null,
+          "link": "https://webtools.ccmc.gsfc.nasa.gov/DONKI/view/FLR/21963/-1"
+        }
+      },
+      {
+        "json": {
+          "flrID": "2022-10-11T08:36:00-FLR-001",
+          "instruments": [
+            {
+              "displayName": "GOES-P: EXIS 1.0-8.0"
+            }
+          ],
+          "beginTime": "2022-10-11T08:36Z",
+          "peakTime": "2022-10-11T08:42Z",
+          "endTime": "2022-10-11T08:46Z",
+          "classType": "M3.9",
+          "sourceLocation": "N24W35",
+          "activeRegionNum": 13112,
+          "linkedEvents": [
+            {
+              "activityID": "2022-10-11T09:23:00-CME-001"
+            }
+          ],
+          "link": "https://webtools.ccmc.gsfc.nasa.gov/DONKI/view/FLR/21973/-1"
+        }
+      },
+      {
+        "json": {
+          "flrID": "2022-10-11T10:47:00-FLR-001",
+          "instruments": [
+            {
+              "displayName": "GOES-P: EXIS 1.0-8.0"
+            }
+          ],
+          "beginTime": "2022-10-11T10:47Z",
+          "peakTime": "2022-10-11T10:52Z",
+          "endTime": "2022-10-11T10:57Z",
+          "classType": "M1.5",
+          "sourceLocation": "N24W36",
+          "activeRegionNum": 13112,
+          "linkedEvents": [
+            {
+              "activityID": "2022-10-11T11:36:00-CME-001"
+            }
+          ],
+          "link": "https://webtools.ccmc.gsfc.nasa.gov/DONKI/view/FLR/21974/-1"
+        }
+      },
+      {
+        "json": {
+          "flrID": "2022-10-12T16:26:00-FLR-001",
+          "instruments": [
+            {
+              "displayName": "GOES-P: EXIS 1.0-8.0"
+            }
+          ],
+          "beginTime": "2022-10-12T16:26Z",
+          "peakTime": "2022-10-12T16:29Z",
+          "endTime": "2022-10-08T16:33Z",
+          "classType": "C4.7",
+          "sourceLocation": "N25W55",
+          "activeRegionNum": 13112,
+          "linkedEvents": [
+            {
+              "activityID": "2022-10-12T17:12:00-CME-001"
+            }
+          ],
+          "link": "https://webtools.ccmc.gsfc.nasa.gov/DONKI/view/FLR/21999/-1"
+        }
+      },
+      {
+        "json": {
+          "flrID": "2022-10-12T23:54:00-FLR-001",
+          "instruments": [
+            {
+              "displayName": "GOES-P: EXIS 1.0-8.0"
+            }
+          ],
+          "beginTime": "2022-10-12T23:54Z",
+          "peakTime": "2022-10-13T00:19Z",
+          "endTime": "2022-10-13T00:37Z",
+          "classType": "M1.5",
+          "sourceLocation": "N25W65",
+          "activeRegionNum": 13112,
+          "linkedEvents": null,
+          "link": "https://webtools.ccmc.gsfc.nasa.gov/DONKI/view/FLR/21998/-1"
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Cron": {
+      "main": [
+        [
+          {
+            "node": "NASA",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {},
+  "id": 15,
+  "meta": {
+    "instanceId": "32fd5f12d82daccde80319b7d5d826a11a96ed956c170eb7505d0458088a7b03"
+  },
+  "tags": []
+}
